@@ -52,7 +52,7 @@ public class AccountController {
 
         account.setEnable(true);
         account.setPassword(encoder.encode(account.getPassword()));
-        account.setRole(Account.Role.ROLE_MEMBER);
+        account.setRole(Account.Role.ROLE_ADMIN);
         accountRepo.save(account);
         model.addAttribute("check",true);  // use own
         return "login";
