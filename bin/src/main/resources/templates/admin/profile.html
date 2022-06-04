@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/notification/template}">
+<head>
+    <meta charset="UTF-8">
+    <title>RequestStudent</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/font-awesome.min.css}">
+
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="my-5 mx-4">
+        <div th:if="${accept}">
+            <p class="alert alert-success" role="alert">
+                Accept Student.
+            </p>
+        </div>
+        <div th:if="${remove}">
+            <p class="alert alert-danger" role="alert">
+                Cancel!Your Request.
+            </p>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header" style="padding-bottom: 0 !important">
+                        <h6>Requests</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Student Name
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Phone No
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Course
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Gender
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Accept
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Remove
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Gender
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Info
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="p: ${register_student}">
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm" th:text="${p.student.name}"></h6>
+                                                <p class="text-xs text-secondary mb-0">john@creative-tim.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0" th:text="${p.student.phNo}"></p>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <a th:href="@{/detail/{id}(id=${p.course.id})}"
+                                           class="badge badge-sm bg-gradient-success"
+                                           th:text="${p.course.courseName}"></a>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold"
+                                              th:text="${p.student.gender.name()}"></span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a th:href="@{accept/{id}(id=${p.id})}"
+                                           class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                           data-original-title="Edit user">
+                                            Accept
+                                        </a>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a th:href="@{deleteStu/{id}(id=${p.id})}"
+                                           class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                           data-original-title="Edit user">
+                                            Remove
+                                        </a>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a th:href="@{/info/{id}(id=${p.student.id})}"
+                                           class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                           data-original-title="Edit user">
+                                            Info
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/popper.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+</body>
+</html>

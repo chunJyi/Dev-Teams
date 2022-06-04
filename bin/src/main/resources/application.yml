@@ -1,0 +1,32 @@
+spring:
+  datasource:
+
+#    url: jdbc:postgres://ec2-3-217-251-77.compute-1.amazonaws.com:5432/deaitg2vsa7rva
+    url: jdbc:postgresql://localhost:5432/trainingdb
+    username: postgres
+    password: postgres
+#    username: kviglgfzpzateg
+#    password: e879a15061e62cead66ff6e40754c53717847aa4a88d9fa5395fc13786501d7a
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+#nginx:
+#  location: http://localhost/images/
+#image:
+#  baseDir: D:/nginx-1.16.2/html/images/
+
+#my:
+#  mail:
+#    host: smtp.gmail.com
+#    post: 587
+#    username: chunjyicj@gmail.com
+#    password: chungyi22
+#    properties:
+#      mail.smtp.starttls.enable: true

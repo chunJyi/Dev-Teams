@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:postgres://ec2-34-236-94-53.compute-1.amazonaws.com:5432/d2c388s1n7ge1
+    username: xqepdmpvakqfuu
+    password: ea284dcacf7be50ce0f8ac7ae9524fef56843080313d624b4f38c8fd7d318f38
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+#nginx:
+#  location: http://localhost/images/
+#image:
+#  baseDir: D:/nginx-1.16.2/html/images/
+
+#my:
+#  mail:
+#    host: smtp.gmail.com
+#    post: 587
+#    username: @gmail.com
+#    password: 
+#    properties:
+#      mail.smtp.starttls.enable: true
