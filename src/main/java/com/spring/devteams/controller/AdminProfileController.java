@@ -102,8 +102,8 @@ public class AdminProfileController {
 
     @GetMapping("info/{id}")
     public String stuInfo(@PathVariable Long id, ModelMap map) {
-        Student student = studentRepo.findById(id).orElseThrow();
-        Account a = accountRepo.findById(student.getAccount().getId()).orElseThrow();
+        Student student = studentRepo.findById(id).orElseThrow( ()-> new RuntimeException("not fount with id"));
+        Account a = accountRepo.findById(student.getAccount().getId()).orElseThrow(()-> new RuntimeException("not fount with id"));
         return profileController.lookProfile(map, student, a);
     }
 
