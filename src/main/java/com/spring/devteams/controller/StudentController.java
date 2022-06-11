@@ -40,23 +40,35 @@ public class StudentController {
     }
 
 
+
     /*  Request for join Class (Start Method)*/
     @GetMapping("register/{id}")
-    public String  edit(@PathVariable Long id, ModelMap map, RedirectAttributes attributes) {
+    public String  joinClass(@PathVariable Long id, ModelMap map, RedirectAttributes attributes) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account a = accountRepo.findByEmail(userDetails.getUsername());
+//        first find student
         Student stu = studentRepo.findByAccountId(a.getId());
+        if (stu == null) {
+            map.addAttribute("student_id", a.getId());
+            map.addAttribute("course_id", id);
+            return "member/register";
+        }
+
         Course course = courseRepo.getById(id);
         int studentCount  = course.getCount();
         LocalDate endDate = course.getStart().plusDays(7);
         LocalDate date = LocalDate.now();
+/*
+        check expire date for join class
+*/
         if( date.isAfter(endDate)){
             map.addAttribute("message","Please Check The Date.");
             map.addAttribute("id",course.getId());
             return "notification/registerErrorPage";
         }
+
         List<Register> registers= registerRepo.findByCourseIdAndEnable(id,true);
 
         int confirmedStudent =registers.size();
@@ -65,42 +77,21 @@ public class StudentController {
             map.addAttribute("id",course.getId());
             return "notification/registerErrorPage";
         }
-        if (stu == null) {
-            map.addAttribute("student_id", a.getId());
-            map.addAttribute("course_id", id);
-            return "member/register";
-        }
         Register regi = registerRepo.findByStudentIdAndCourseId(stu.getId(), id);
         if (regi != null) {
             map.addAttribute("message","Can't join the same course");
             return "notification/registerErrorPage";
         }
-            Register register = new Register();
-            register.setStudent(studentRepo.getById(stu.getId()));
-            register.setCourse(courseRepo.getById(id));
-            registerRepo.save(register);
-            attributes.addFlashAttribute("success",true);
-            map.addAttribute("message","yay, everything is working.");
+        Register register = new Register();
+        register.setStudent(studentRepo.getById(stu.getId()));
+        register.setCourse(courseRepo.getById(id));
+        registerRepo.save(register);
+        attributes.addFlashAttribute("success",true);
+        map.addAttribute("message","yay, everything is working.");
         return "notification/registerSuccessPage";
     }
 
     /*  Request for join Class (End Method)*/
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        Account a= accountRepo.findByEmail(userDetails.getUsername());
-//        Student stu=  studentRepo.findByAccountId(a.getId());
-//        if (stu == null) {
-//
-//            map.addAttribute("account_id", a.getId());
-//            map.addAttribute("course_id", id);
-//            return "member/register";
-//        }
-//        Register register = new Register();
-//        register.setStudent(studentRepo.);
-//        register.setCourse(courseRepo.getOne(id));
-//        registerRepo.save(register);
-
 
     /*Create Object for Student (Start Method) -> acceptProfile.html*/
     @ModelAttribute(name = "student")
@@ -112,14 +103,15 @@ public class StudentController {
 
     /*Request Student From (Start Method) <- member/register.html*/
     @PostMapping("regi")
-    public String register(@ModelAttribute("student") Student student,@RequestParam Course course ,RedirectAttributes attributes){
+    public String register(@ModelAttribute("student") Student student,@RequestParam Course course ,ModelMap map ){
         studentRepo.save(student);
         Register register = new Register();
         register.setStudent(student);
         register.setCourse(course);
         registerRepo.save(register);
-        attributes.addFlashAttribute("success",true);
-        return "redirect:/";
+        map.addAttribute("success",true);
+        map.addAttribute("message","yay, everything is working.");
+        return "notification/registerSuccessPage";
     }
 
 

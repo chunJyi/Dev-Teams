@@ -1,7 +1,10 @@
 package com.spring.devteams.controller;
 
+import com.spring.devteams.model.entity.Account;
 import com.spring.devteams.model.entity.History;
 import com.spring.devteams.model.entity.Register;
+import com.spring.devteams.model.entity.Student;
+import com.spring.devteams.model.repo.AccountRepo;
 import com.spring.devteams.model.repo.HistoryRepo;
 import com.spring.devteams.model.repo.RegisterRepo;
 import com.spring.devteams.model.repo.StudentRepo;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +29,9 @@ public class AdminProfileController {
     private final RegisterRepo registerRepo;
     private final StudentRepo studentRepo;
     private final HistoryRepo historyRepo;
+    private final AccountRepo accountRepo;
+
+    private ProfileController profileController;
 
 
     @GetMapping("/requestProfile")
@@ -75,15 +82,9 @@ public class AdminProfileController {
     public String remove(@PathVariable Long id, RedirectAttributes attributes) {
         registerRepo.deleteById(id);
         attributes.addFlashAttribute("remove", true);
-        return "redirect:/acceptProfile";
+        return "redirect:/requestProfile";
     }
 
-//    @GetMapping("deleteStu/{id}")
-//    public String delete(@PathVariable Long id, RedirectAttributes attributes) {
-//        registerRepo.deleteById(id);
-//        attributes.addFlashAttribute("remove", true);
-//        return "redirect:/requestProfile";
-//    }
 
 
 /*
@@ -96,26 +97,32 @@ public class AdminProfileController {
         registerRepo.save(register);
         map.addAttribute("message", "" +
                 "removed this student");
-        return "registerSuccessPage";
+        return "notification/registerSuccessPage";
     }
 
     @GetMapping("info/{id}")
     public String stuInfo(@PathVariable Long id, ModelMap map) {
-        List<Register> registers = registerRepo.findByStudentId(id);
-        map.addAttribute("student", studentRepo.getOne(id));
-        List<Register> request = registers.stream().filter(b -> b.getEnable() == false).collect(Collectors.toList());
-        List<Register> record = registers.stream().filter(b -> b.getEnable() == true).collect(Collectors.toList());
-        map.addAttribute("request", request);
-//        map.addAttribute("courseName",request.stream().filter( req -> req.getCourse()))
-        map.addAttribute("record", record);
-        return "member/profile";
+        Student student = studentRepo.findById(id).orElseThrow();
+        Account a = accountRepo.findById(student.getAccount().getId()).orElseThrow();
+        return profileController.lookProfile(map, student, a);
     }
+
+//       return profileController.lookProfile(map,student,account);
+//        List<Register> registers = registerRepo.findByStudentId(id);
+//        map.addAttribute("student", studentRepo.getOne(id));
+//        List<Register> request = registers.stream().filter(b -> b.getEnable() == false).collect(Collectors.toList());
+//        List<Register> record = registers.stream().filter(b -> b.getEnable() == true).collect(Collectors.toList());
+//        map.addAttribute("request", request);
+////        map.addAttribute("courseName",request.stream().filter( req -> req.getCourse()))
+//        map.addAttribute("record", record);
+//        return "member/profile";
+//    }
 
     @GetMapping("/studentRecord")
     public String studentRecord(ModelMap map) {
         List<History> records = historyRepo.findAll();
         map.addAttribute("records", records);
-        return "studentRecords";
+        return "admin/studentRecords";
     }
 
 

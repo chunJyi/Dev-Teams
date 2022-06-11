@@ -28,7 +28,11 @@ public class ProfileController {
         String authUserName = commonAdvice.loginUser().getUsername();
         Account a = accountRepo.findByEmail(authUserName);
         Student student = studentRepo.findByAccountId(a.getId());
+       return lookProfile(map,student,a);
 
+    }
+
+    public String lookProfile ( ModelMap map,Student student,Account a){
         map.addAttribute("account", a);
         if (student != null) {
             List<Register> registers = registerRepo.findByStudentId(student.getId());
@@ -41,8 +45,7 @@ public class ProfileController {
             map.addAttribute("request", listObj);
             map.addAttribute("accept", listObj);
         }
-        return "profile";
-
+        return "member/profile";
     }
 
 

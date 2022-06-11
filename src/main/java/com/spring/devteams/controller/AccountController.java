@@ -16,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.beans.Transient;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -23,9 +25,9 @@ import java.util.Optional;
 public class AccountController {
 
 
-    private  CommonAdvice commonAdvice;
-    private  AccountRepo accountRepo;
-    private  PasswordEncoder encoder;
+    private final  CommonAdvice commonAdvice;
+    private final  AccountRepo accountRepo;
+    private final  PasswordEncoder encoder;
 
     public AccountController(CommonAdvice commonAdvice, AccountRepo accountRepo, PasswordEncoder encoder) {
         this.commonAdvice = commonAdvice;
@@ -44,9 +46,11 @@ public class AccountController {
         if(result.hasErrors()){
             return "sign-up";
         }
-        Account accou = accountRepo.findByEmail(account.getEmail());
-        if(accou != null){
+        if(accountRepo.findByEmail(account.getEmail()) != null){
             model.addAttribute("fail",true);
+            return "sign-up";
+        }
+        if (account.getBirthday().isAfter(LocalDate.now())){
             return "sign-up";
         }
 

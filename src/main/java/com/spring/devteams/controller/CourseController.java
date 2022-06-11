@@ -43,7 +43,7 @@ public class CourseController {
 
     @GetMapping("/updateCourse{id}")
     public String updateCourse(@PathVariable("id") Long id,ModelMap map){
-        Course course = courseRepo.getOne(id);
+        Course course = courseRepo.getById(id);
         map.addAttribute("course",course);
         return "admin/course";
     }
@@ -72,7 +72,7 @@ public class CourseController {
 
     @GetMapping("edit/{id}")
     public String edit(@PathVariable Long id ,ModelMap map){
-        map.addAttribute("course",courseRepo.getOne(id));
+        map.addAttribute("course",courseRepo.getById(id));
         return "admin/course";
     }
     @GetMapping("/delete/{id}")
