@@ -21,12 +21,10 @@ https://hub.docker.com/u/chunjyi
 
       sudo docker pull chunjyi/dev_team
       
-#### 2. create database using PostgreSQL
+#### 2. create database using PostgreSQL and  insert root user 
 
       create database dev_teamdb;
       
-      
- #### . insert root user 
     
 #### 2. run docker 
 
